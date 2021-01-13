@@ -2276,6 +2276,8 @@ __webpack_require__.r(__webpack_exports__);
         $("#modalAddProduct").modal("hide");
 
         _this.$parent.$refs.productTableMessage.show("Товар успешно добавлен.");
+
+        _this.$parent.getProducts(1);
       })["catch"](function (error) {
         _this.errors = error.response.data.errors;
 
@@ -6883,7 +6885,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.preloader[data-v-77d6c8ca] {\n    width: 100%;\n    height: 100%;\n    display: flex;\n    justify-content: center;\n    align-items: center;\n    background: #f8fafc;\n    z-index: 10000;\n    position: absolute;\n}\n", ""]);
+exports.push([module.i, "\n.preloader[data-v-77d6c8ca] {\r\n    width: 100%;\r\n    height: 100%;\r\n    display: flex;\r\n    justify-content: center;\r\n    align-items: center;\r\n    background: #f8fafc;\r\n    z-index: 10000;\r\n    position: absolute;\n}\r\n", ""]);
 
 // exports
 

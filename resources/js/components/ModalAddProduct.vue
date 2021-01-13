@@ -105,6 +105,7 @@ export default {
                     this.$parent.$refs.productTableMessage.show(
                         "Товар успешно добавлен."
                     );
+                    this.$parent.getProducts(1);
                 })
                 .catch((error) => {
                     this.errors = error.response.data.errors;
