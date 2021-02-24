@@ -5,24 +5,17 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
+use App\Http\Requests\ProductListRequest;
 use App\Product;
 
 class ProductController extends Controller
 {
     /**
-     * Instantiate a new ProductController instance.
-     */
-    public function __construct()
-    {
-        $this->middleware('auth.api', ['except' => ['index','show']]);
-    }
-
-    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(ProductListRequest $request)
     {
         return response()->json([
             'products' => Product::select('id', 'name', 'price')->paginate($request->limit)

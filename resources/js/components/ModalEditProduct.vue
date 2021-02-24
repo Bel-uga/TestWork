@@ -91,17 +91,13 @@ export default {
             errors: {},
         };
     },
-    watch: {
-        "form.id": function () {
-            this.getProduct();
-        },
-    },
     methods: {
-        getProduct: function () {
+        getProduct: function (id) {
             this.$root.$refs.preloader.show();
             axios
-                .get(`/api/product/${this.form.id}`)
+                .get(`/api/product/${id}`)
                 .then((response) => {
+                    this.form.id = response.data.product.id;
                     this.form.name = response.data.product.name;
                     this.form.price = response.data.product.price;
                     this.$root.$refs.preloader.hide();

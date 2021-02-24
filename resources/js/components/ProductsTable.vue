@@ -58,7 +58,9 @@
                                 data-toggle="modal"
                                 data-target="#modalEditProduct"
                                 @click="
-                                    $refs.modalEditProduct.form.id = product.id
+                                    $refs.modalEditProduct.getProduct(
+                                        product.id
+                                    )
                                 "
                             >
                                 <i

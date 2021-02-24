@@ -1922,11 +1922,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -1992,6 +1987,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modalAddProduct__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modalAddProduct */ "./resources/js/components/modalAddProduct.vue");
 /* harmony import */ var _modalEditProduct__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modalEditProduct */ "./resources/js/components/modalEditProduct.vue");
 /* harmony import */ var _Message__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Message */ "./resources/js/components/Message.vue");
+//
+//
 //
 //
 //
@@ -2394,17 +2391,13 @@ __webpack_require__.r(__webpack_exports__);
       errors: {}
     };
   },
-  watch: {
-    "form.id": function formId() {
-      this.getProduct();
-    }
-  },
   methods: {
-    getProduct: function getProduct() {
+    getProduct: function getProduct(id) {
       var _this = this;
 
       this.$root.$refs.preloader.show();
-      axios.get("/api/product/".concat(this.form.id)).then(function (response) {
+      axios.get("/api/product/".concat(id)).then(function (response) {
+        _this.form.id = response.data.product.id;
         _this.form.name = response.data.product.name;
         _this.form.price = response.data.product.price;
 
@@ -38807,29 +38800,26 @@ var render = function() {
           class: { show: _vm.visible },
           attrs: { role: "alert" }
         },
-        [_vm._v("\n    " + _vm._s(_vm.text) + "\n    "), _vm._m(0)]
+        [
+          _vm._v("\n    " + _vm._s(_vm.text) + "\n    "),
+          _c(
+            "button",
+            {
+              staticClass: "close",
+              attrs: { type: "button" },
+              on: {
+                click: function($event) {
+                  _vm.visible = false
+                }
+              }
+            },
+            [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+          )
+        ]
       )
     : _vm._e()
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "button",
-      {
-        staticClass: "close",
-        attrs: {
-          type: "button",
-          "data-dismiss": "alert",
-          "aria-label": "Close"
-        }
-      },
-      [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
-    )
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -39000,7 +38990,9 @@ var render = function() {
                       },
                       on: {
                         click: function($event) {
-                          _vm.$refs.modalEditProduct.form.id = product.id
+                          return _vm.$refs.modalEditProduct.getProduct(
+                            product.id
+                          )
                         }
                       }
                     },
