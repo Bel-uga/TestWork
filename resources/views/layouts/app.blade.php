@@ -24,13 +24,15 @@
 <body>
     <div id="app">
         <preloader ref="preloader"></preloader>
-        @guest
-        <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow navbar-expand-lg">
-            <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" href="/">{{ config('app.name', 'Laravel') }}</a>
+
+        <nav class="navbar navbar-light bg-light sticky-top flex-md-nowrap p-0 navbar-expand-lg border">
+            <a class="navbar-brand bg-light col-md-3 col-lg-2 mr-0 px-3"
+                href="/">{{ config('app.name', 'Laravel') }}</a>
             <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-toggle="collapse"
                 data-target="#mainMenu" aria-controls="mainMenu" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
+            @guest
             <div class="collapse navbar-collapse" id="mainMenu">
                 <ul class="navbar-nav ml-auto pl-2">
                     <li class="nav-item">
@@ -43,17 +45,9 @@
                     @endif
                 </ul>
             </div>
-        </nav>
-        @else
-        <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow navbar-expand-lg">
-            <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" href="/">{{ config('app.name', 'Laravel') }}</a>
-            <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-toggle="collapse"
-                data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false"
-                aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+            @else
             <div class="dropdown ml-auto">
-                <a class="btn dropdown-toggle text-white" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+                <a class="btn dropdown-toggle text-dark" type="button" id="dropdownMenuButton" data-toggle="dropdown"
                     aria-haspopup="true" aria-expanded="false">
                     {{ Auth::user()->name }}
                 </a>
@@ -66,8 +60,8 @@
                     </form>
                 </div>
             </div>
+            @endguest
         </nav>
-        @endguest
         @yield('content')
     </div>
 </body>

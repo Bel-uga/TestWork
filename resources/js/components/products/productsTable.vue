@@ -46,7 +46,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(product, index) in products" :key="index">
+                    <tr v-for="(product, index) in products.data" :key="index">
                         <th scope="row">{{ index + 1 }}</th>
                         <td>{{ product.name }}</td>
                         <td>{{ product.price }}</td>
@@ -86,16 +86,75 @@
         </div>
         <nav>
             <ul class="pagination justify-content-center my-3">
+                <li class="page-item">
+                    <a
+                        class="page-link text-secondary rounded-0 btn"
+                        aria-label="Previous"
+                        @click="getProducts(1)"
+                    >
+                        <i
+                            class="fa fa-angle-double-left"
+                            aria-hidden="true"
+                        ></i>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a
+                        class="page-link text-secondary rounded-0 btn"
+                        aria-label="Previous"
+                        @click="
+                            getProducts(
+                                products.current_page > 1
+                                    ? products.current_page - 1
+                                    : products.current_page
+                            )
+                        "
+                    >
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                    </a>
+                </li>
                 <li
                     class="page-item"
-                    v-for="numberPage in pagination.lastPage"
-                    :key="numberPage"
+                    v-for="pageNumber in pagination.max_page"
+                    :key="pageNumber"
                     v-bind:class="{
-                        active: numberPage === pagination.currentPage,
+                        active:
+                            pageNumber + pagination.offset ===
+                            products.current_page,
                     }"
                 >
-                    <a class="page-link" @click="getProducts(numberPage)">
-                        {{ numberPage }}
+                    <a
+                        class="page-link rounded-0 ml-2 btn"
+                        @click="getProducts(pageNumber + pagination.offset)"
+                    >
+                        {{ pageNumber + pagination.offset }}
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a
+                        class="page-link rounded-0 ml-2 text-secondary btn"
+                        aria-label="Next"
+                        @click="
+                            getProducts(
+                                products.current_page < products.last_page
+                                    ? products.current_page + 1
+                                    : products.current_page
+                            )
+                        "
+                    >
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a
+                        class="page-link rounded-0 ml-2 text-secondary btn"
+                        aria-label="Next"
+                        @click="getProducts(products.last_page)"
+                    >
+                        <i
+                            class="fa fa-angle-double-right"
+                            aria-hidden="true"
+                        ></i>
                     </a>
                 </li>
             </ul>
@@ -106,7 +165,7 @@
 <script>
 import modalAddProduct from "./modalAddProduct";
 import modalEditProduct from "./modalEditProduct";
-import message from "./Message";
+import message from "../message";
 export default {
     components: {
         modalAddProduct,
@@ -117,8 +176,8 @@ export default {
         return {
             products: [],
             pagination: {
-                lastPage: 1,
-                currentPage: 1,
+                max_page: 10,
+                offset: 1,
             },
             limit: 10,
         };
@@ -137,16 +196,16 @@ export default {
                     },
                 })
                 .then((response) => {
-                    this.products = response.data.products.data;
-                    this.pagination.lastPage = response.data.products.last_page;
-                    this.pagination.currentPage =
-                        response.data.products.current_page;
-                    this.$root.$refs.preloader.hide();
+                    this.products = response.data.products;
+                    Vue.nextTick(() => {
+                        this.setPaginate();
+                        this.$root.$refs.preloader.hide();
+                    });
                 })
                 .catch((error) => {
                     this.$root.$refs.preloader.hide();
                     this.$refs.productTableMessage.show(
-                        "Произошла ошибка во время добавления товара."
+                        "Произошла ошибка во время получения товаров."
                     );
                 });
         },
@@ -167,6 +226,20 @@ export default {
                         "Произошла ошибка во время удаления товара."
                     );
                 });
+        },
+        setPaginate() {
+            this.pagination.max_page =
+                this.products.last_page <= 10 ? this.products.last_page : 10;
+            this.pagination.offset =
+                this.products.last_page <= 10 || this.products.current_page <= 5
+                    ? 0
+                    : this.products.current_page - 5;
+            if (
+                this.products.last_page - this.products.current_page < 5 &&
+                this.products.last_page > 10
+            ) {
+                this.pagination.offset = this.products.last_page - 10;
+            }
         },
     },
 };

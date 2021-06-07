@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import products from './components/ProductsTable'
-import main from './components/Main'
+import products from './components/products/productsTable'
+import main from './components/main'
 Vue.use(Router)
 
 export default new Router({

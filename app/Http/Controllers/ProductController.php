@@ -30,10 +30,10 @@ class ProductController extends Controller
      */
     public function store(StoreProductRequest $request)
     {
-        $product = new Product();
-        $product->name = $request->name;
-        $product->price = $request->price;
-        $product->save();
+        Product::create([
+            'name' => $request->name,
+            'price' => $request->price
+        ]);
 
         return response()->json([
             'message' => 'ok'
@@ -62,10 +62,11 @@ class ProductController extends Controller
      */
     public function update(UpdateProductRequest $request, $id)
     {
-        $product = Product::find($id);
-        $product->name = $request->name;
-        $product->price = $request->price;
-        $product->save();
+        Product::where('id', $id)
+        ->update([
+            'name' => $request->name,
+            'price' => $request->price
+        ]);
 
         return response()->json([
             'message' => 'ok'
